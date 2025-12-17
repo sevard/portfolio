@@ -11,27 +11,44 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv(BASE_DIR / '.env')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-$@49+*s7)_&ylcw#$_if9r-paj__pe#&t&k$2nzpi0%e93u=re'
+# from django.core.management.utils import get_random_secret_key 
+# SECRET_KEY = get_random_secret_key()
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False 
+DEBUG = True if os.environ.get('DEV_ENV') else False 
 
-if os.environ.get('WEBSITE_HOSTNAME'):
-    ALLOWED_HOSTS = [os.environ.get('WEBSITE_HOSTNAME')] 
-else:
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1'] 
+# Configure allowed hosts for Cloud Run
+ALLOWED_HOSTS = [
+    os.environ.get('CLOUD_RUN_URL', 'localhost'),
+    '127.0.0.1',
+]
+
+
+# Add any custom domains from environment variable
+CUSTOM_DOMAIN = os.environ.get('CUSTOM_DOMAIN')
+if CUSTOM_DOMAIN:
+    ALLOWED_HOSTS.append(CUSTOM_DOMAIN)
+
+
+CSRF_TRUSTED_ORIGINS = [
+    f"https://{host}" for host in ALLOWED_HOSTS if host not in ['localhost', '127.0.0.1']
+]
+
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -117,4 +134,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
+STATICFILES_DIRS = [ BASE_DIR / 'static', ]
 STATIC_URL = 'static/'
+MEDIA_URL = 'media/'

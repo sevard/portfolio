@@ -8,5 +8,7 @@ gunicorn==23.0.0
     # via portfolio (pyproject.toml)
 packaging==25.0
     # via gunicorn
+python-dotenv==1.2.1
+    # via portfolio (pyproject.toml)
 sqlparse==0.5.4
     # via django
