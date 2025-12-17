@@ -5,5 +5,7 @@ app_name = 'showcase'
 
 urlpatterns = [
     # /showcase/
-    path('', views.index, name='index')
+    path('', views.home, name='home'),
+    path('about/', views.about, name='about'),
+    path('certs/', views.certs, name='certs')
 ]
