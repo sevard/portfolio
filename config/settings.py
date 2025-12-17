@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/6.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,8 +25,10 @@ SECRET_KEY = 'django-insecure-$@49+*s7)_&ylcw#$_if9r-paj__pe#&t&k$2nzpi0%e93u=re
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False 
 
-ALLOWED_HOSTS = ['portfolio-33319444552.us-central1.run.app', 'vardanyan.info']
-
+if os.environ.get('WEBSITE_HOSTNAME'):
+    ALLOWED_HOSTS = [os.environ.get('WEBSITE_HOSTNAME')] 
+else:
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1'] 
 
 # Application definition
 
