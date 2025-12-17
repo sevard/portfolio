@@ -14,3 +14,5 @@ python-dotenv==1.2.1
     # via portfolio (pyproject.toml)
 sqlparse==0.5.4
     # via django
+whitenoise==6.11.0
+    # via portfolio (pyproject.toml)
